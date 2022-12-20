@@ -11,7 +11,7 @@ THROTTLE_PERCENTAGE = property.getNumber("Throttle Percentage") / 100
 MAX_RPS = 30
 AFR_TGT = property.getNumber("AFR Target")
 TH_UDC = UpDownCounter:new(1 / 90, 0, 1)
-throttleIn = 0
+THROTTLE_IN = 0
 AFR_UDC = UpDownCounter:new(0.002, 10, 17)
 FUEL_UDC = UpDownCounter:new(1 / 180, 0, 1)
 AIR_UDC = UpDownCounter:new(1 / 180, 0, 1)
@@ -40,13 +40,13 @@ function onTick()
 		input.getNumber(7)
 
 	if input.getNumber(5) == 1 then
-		throttleIn = (TH_UDC:update(1)) * THROTTLE_PERCENTAGE
+		THROTTLE_IN = (TH_UDC:update(1)) * THROTTLE_PERCENTAGE
 	elseif input.getNumber(5) == -1 then
-		throttleIn = (TH_UDC:update(0)) * THROTTLE_PERCENTAGE
+		THROTTLE_IN = (TH_UDC:update(0)) * THROTTLE_PERCENTAGE
 	end
 	local AFR = volumeFuel == 0 and AFR_TGT or volumeAir / volumeFuel
-	local fuel, air = FUEL_UDC:update((throttleIn / 2) * (1 - altitude / 4000)),
-		AIR_UDC:update(throttleIn * (1 - altitude / 4000))
+	local fuel, air = FUEL_UDC:update((THROTTLE_IN / 2) * (1 - altitude / 4000)),
+		AIR_UDC:update(THROTTLE_IN * (1 - altitude / 4000))
 	local AFRTarget = AFR_UDC:update(AFR_TGT - altitude / 800 - clamp(altitude - ALT_P, 0, 100) * 1.35)
 	local AFRforPID = AFR - AFRTarget
 
