@@ -57,8 +57,10 @@ function onTick()
 			OUT_AIR = air
 		else
 			OUT_ENGINE_STARTER = false
-			OUT_FUEL = fuel + FUEL_PID:update(AFRforPID, 0) + 0.1 * fuel / 0.5
-			OUT_AIR = air - AIR_PID:update(AFRforPID, 0) + 0.1 * air
+			if throttleIn ~= 0 then
+				OUT_FUEL = fuel + FUEL_PID:update(AFRforPID, 0) + 0.1 * fuel / 0.5
+				OUT_AIR = air - AIR_PID:update(AFRforPID, 0) + 0.1 * air
+			end
 		end
 	else
 		OUT_ENGINE_STARTER = false
