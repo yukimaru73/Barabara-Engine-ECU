@@ -12,6 +12,7 @@ THROTTLE_IN = 0
 TH_PID = PID:new(0.3, 0.003, 0.000001, 0.5)
 
 ALTTITUDE_P = 0
+CR_UDC = UpDownCounter:new(1 / 60, 0, 0.5)
 
 THROTTLE_OUT_AIR = 0
 THROTTLE_OUT_FUEL = 0
@@ -33,9 +34,9 @@ function onTick()
 	local afrError = afr - idealAFR
 
 	if input.getNumber(5) > 0.5 then
-		THROTTLE_IN = (TH_UDC:update(1)) * THROTTLE_PERCENTAGE
+		THROTTLE_IN = (TH_UDC:update(1)) * THROTTLE_PERCENTAGE*(1-CR_UDC:update(climbRate))
 	elseif input.getNumber(5) < -0.5 then
-		THROTTLE_IN = (TH_UDC:update(0)) * THROTTLE_PERCENTAGE
+		THROTTLE_IN = (TH_UDC:update(0)) * THROTTLE_PERCENTAGE*(1-CR_UDC:update(climbRate))
 	end
 
 	if isEngineOn then
